@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    stdin_open: true # to avoid getting exit status code 0
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - /app/node_modules # do not reference node_modules
+      - .:/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true # to enable auto refresh on save
+  tests:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: ["npm", "test"]
